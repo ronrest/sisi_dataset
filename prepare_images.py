@@ -4,6 +4,8 @@ Code to generate the SiSi dataset
 """
 import os
 import glob
+import pickle
+
 import PIL
 import PIL.Image
 import PIL.ImageOps
@@ -19,6 +21,21 @@ __version__ = "2.0"
 id2label = ["null", "bird", "cat", "dog"]
 label2id = {label:id for id,label in enumerate(id2label)}
 n_classes = len(id2label)
+
+
+# ==============================================================================
+#                                                                     OBJ2PICKLE
+# ==============================================================================
+def obj2pickle(obj, file, protocol=2):
+    """ Saves an object as a binary pickle file to the desired file path. """
+    # Ensure parent directory and necesary file structure exists
+    pardir = os.path.dirname(file)
+    if pardir.strip() != "": # ensure pardir is not an empty string
+        if not os.path.exists(pardir):
+            os.makedirs(pardir)
+
+    with open(file, mode="wb") as fileObj:
+        pickle.dump(obj, fileObj, protocol=protocol)
 
 
 # ==============================================================================
