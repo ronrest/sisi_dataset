@@ -3,6 +3,7 @@ Code to generate the SiSi dataset
 
 """
 import os
+import glob
 import PIL
 import PIL.Image
 import PIL.ImageOps
@@ -47,5 +48,29 @@ def create_template_from_file(file, shape=(100,100)):
     img = img.resize(shape, resample=PIL.Image.BICUBIC)
     img = PIL.ImageOps.invert(img) # make white the inside of the object
     return np.array(np.asarray(img) > 125, dtype=np.uint8)
+
+
+def templates_from_raw_images(data_dir, id2label, shape=(100,100)):
+    n_classes = len(id2label)
+    templates_list = [None]
+    for label in id2label[1:]:
+        # TEMPLATES FOR ONE CLASS
+        dirpath = os.path.join(data_dir, label)
+
+        # Get list of image files for this class
+        img_files = []
+        for ext in ['*.jpg', '*.png']:
+            img_files.extend(glob.glob(os.path.join(dirpath, ext)))
+        n_images = len(img_files)
+
+        # For each image file convert to a template array
+        templates = np.zeros([n_images, shape[1], shape[0]], dtype=np.uint8)
+        for i, img_file in enumerate(img_files):
+            templates[i] = create_template_from_file(img_file, shape=shape)
+
+        # Add to templates dictionary
+        templates_list.append(templates)
+
+    return templates_list
 
 
