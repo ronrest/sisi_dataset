@@ -312,7 +312,7 @@ if __name__ == '__main__':
 
     # # Visualize the data and labels
     # X_grid = batch_of_images_to_grid(data["X_train"][:50], 5, 10)
-    # Y_grid = batch_of_images_to_grid(data["Y_train"][1:51], 5, 10)
+    # Y_grid = batch_of_images_to_grid(data["Y_train"][:50], 5, 10)
     # show_img(X_grid)
     # viz_segmentation_label(Y_grid).show()
     # viz_overlayed_segmentation_label(X_grid, Y_grid).show()
