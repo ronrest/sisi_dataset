@@ -203,7 +203,48 @@ def random_scene(templates, img_shape=(100,100), min_scale=0.5, rotate=30, noise
     return scene, label
 
 
-def generate_data(templates, img_shape=(100,100), n_train=1024, n_valid=512, n_test=1024, noise=10, rgb=False, seed=45):
+# ==============================================================================
+#                                                                  GENERATE_DATA
+# ==============================================================================
+def generate_data(templates, img_shape=(64,64), n_train=1024, n_valid=512, n_test=1024, noise=10, rgb=False, seed=45):
+    """ Given the templates for each class of object, it generates the data as
+        a dictionary of numpy arrays with the follogint keys:
+            data["X_train"] = Input images for training
+            data["X_valid"] = Input images for validation
+            data["X_test"] = Input images for testing
+            data["Y_train"] = Label images for training
+            data["Y_valid"] = Label images for validation
+            data["Y_test"] = Label images for testing
+
+        The shapes of the input image arrays depends on the option selected
+        for `rgb`. If `rgb` is set to True, then they will be:
+            [n_images, img_height, img_width, 3]
+
+        If `rgb` is set to False, then the input image arrays will be:
+            [n_images, img_height, img_width, 1]
+
+        The label image arrays will be of shape:
+            [n_images, img_height, img_width]
+
+        All arrays will be `np.uint8` datatype.
+        - The input image arrays contain pixel intensity values 0-255
+        - The label image arrays contain pixel values representing the
+          class label for each pixel.
+
+    Args:
+        templates:  (list of numpy arrays) The index of the list represents
+                    the class label. And the numpy array in that position
+                    is all the template images for that class of object.
+        img_shape:  (2-tuple)(default=(64,64))
+        n_train:    (int)(default=1024)
+        n_valid:    (int)(default=512)
+        n_test:     (int)(default=1024)
+        noise:      ()(default=10)
+        rgb:        (bool)(default=False)
+        seed:       (int)(default=45)
+    Returns:
+        (dict of numpy arrays)
+    """
     np.random.seed(seed=seed)
     height, width = img_shape
     n_channels = 3 if rgb else 1
