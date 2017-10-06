@@ -91,7 +91,25 @@ def templates_from_raw_images(data_dir, id2label, shape=(100,100)):
     return templates_list
 
 
+# ==============================================================================
+#                                                                   RANDOM_SCENE
+# ==============================================================================
 def random_scene(templates, img_shape=(100,100), min_scale=0.5, rotate=30, noise=10, rgb=False):
+    """ Given a templates list, it randomly generates a scene image, and
+        label pair.
+
+    Args:
+        templates:  (list) List of template images for each class
+        img_shape:  (2-tuple of ints) Dimensions of output image
+        min_scale:  (float) minimum amount of random scaling to apply for each
+                    template
+        rotate:     (int) maximum amount of rotation in either direction
+                    to apply to each template.
+        noise:      (int or None) Amount of random noise to add as
+                    a standard deviation in pixel intensity from the base color
+    Returns:
+        (2-tuple)
+    """
     height, width = img_shape
     label = np.zeros(img_shape, dtype=np.uint8)
 
