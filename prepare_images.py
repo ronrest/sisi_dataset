@@ -288,3 +288,34 @@ def generate_data(templates, img_shape=(64,64), n_train=1024, n_valid=512, n_tes
     return data
 
 
+if __name__ == '__main__':
+    from viz import batch_of_images_to_grid, viz_segmentation_label, show_template_image, show_img
+
+    data_dir = "raw_images"
+    pickle_file_path = "data64_flat_grey.pickle" # Path to output pickle file
+    img_shape=(64,64)
+    n_train=1024
+    n_valid=512
+    n_test=1024
+    rgb=False
+    noise = None
+    seed=45
+
+    templates = templates_from_raw_images(data_dir, id2label=id2label, shape=img_shape)
+
+    # # Visualize the templates
+    # show_template_image(batch_of_images_to_grid(templates[1], 5, 10))
+    # show_template_image(batch_of_images_to_grid(templates[2], 5, 10))
+    # show_template_image(batch_of_images_to_grid(templates[3], 5, 10))
+
+    data = generate_data(templates, img_shape=img_shape, n_train=n_train, n_valid=n_valid, n_test=n_test, noise=noise, rgb=rgb, seed=seed)
+
+    # # Visualize the data and labels
+    # X_grid = batch_of_images_to_grid(data["X_train"][:50], 5, 10)
+    # Y_grid = batch_of_images_to_grid(data["Y_train"][1:51], 5, 10)
+    # show_img(X_grid)
+    # viz_segmentation_label(Y_grid).show()
+    # viz_overlayed_segmentation_label(X_grid, Y_grid).show()
+
+    # Save as a pickle
+    obj2pickle(data, file=pickle_file_path, protocol=2)
