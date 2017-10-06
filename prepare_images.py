@@ -317,5 +317,10 @@ if __name__ == '__main__':
     # viz_segmentation_label(Y_grid).show()
     # viz_overlayed_segmentation_label(X_grid, Y_grid).show()
 
+    # # Save sample images
+    # array2pil(X_grid).save("sample_train.jpg", "JPEG")
+    # viz_segmentation_label(Y_grid, saveto="sample_labels.jpg")
+    # viz_overlayed_segmentation_label(X_grid, Y_grid, saveto="sample_overlayed.jpg")
+
     # Save as a pickle
     obj2pickle(data, file=pickle_file_path, protocol=2)
