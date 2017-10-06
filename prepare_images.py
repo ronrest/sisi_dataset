@@ -14,7 +14,14 @@ __credits__ = ["Ronny Restrepo"]
 __license__ = "Apache License"
 __version__ = "2.0"
 
+# ==============================================================================
+#                                                      CREATE_TEMPLATE_FROM_FILE
+# ==============================================================================
 def create_template_from_file(file, shape=(100,100)):
+    """ Given a filepath to a silhouette image, it returns a numpy array with
+        1 representing the region of the object of interesst, and 0 as the
+        background.
+    """
     img = PIL.Image.open(file)
 
     # CONVERT TO GRESYSCALE
