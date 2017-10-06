@@ -14,6 +14,12 @@ __credits__ = ["Ronny Restrepo"]
 __license__ = "Apache License"
 __version__ = "2.0"
 
+# SETTINGS
+id2label = ["null", "bird", "cat", "dog"]
+label2id = {label:id for id,label in enumerate(id2label)}
+n_classes = len(id2label)
+
+
 # ==============================================================================
 #                                                      CREATE_TEMPLATE_FROM_FILE
 # ==============================================================================
