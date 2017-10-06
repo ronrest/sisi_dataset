@@ -50,7 +50,24 @@ def create_template_from_file(file, shape=(100,100)):
     return np.array(np.asarray(img) > 125, dtype=np.uint8)
 
 
+# ==============================================================================
+#                                                      TEMPLATES_FROM_RAW_IMAGES
+# ==============================================================================
 def templates_from_raw_images(data_dir, id2label, shape=(100,100)):
+    """ Given a directory containing a separate subdirectories for each
+        class of object, each containing image files of silhouettes
+        of those objects, it creates a list of template images, such that:
+
+        Each image is resized to `shape`, and the silhouette regions
+        are converted to a value of 1, and background converted to value
+        of 0.
+
+        The templates list takes the following structure:
+            [None, class1_templates, class2_templates, .... classN_templates]
+        where each classI_templates is a numpy array of shape
+            [n_images, shape[1], shape[0]]
+        and of np.uint8 dtype.
+    """
     n_classes = len(id2label)
     templates_list = [None]
     for label in id2label[1:]:
