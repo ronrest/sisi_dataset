@@ -203,3 +203,30 @@ def random_scene(templates, img_shape=(100,100), min_scale=0.5, rotate=30, noise
     return scene, label
 
 
+def generate_data(templates, img_shape=(100,100), n_train=1024, n_valid=512, n_test=1024, noise=10, rgb=False, seed=45):
+    np.random.seed(seed=seed)
+    height, width = img_shape
+    n_channels = 3 if rgb else 1
+
+    print("CREATING DATA")
+    est_size = (height*width*(n_channels+1)*(n_test+n_valid+n_test))/(1024*1000)
+    print("- Estimated size is {:0.2f} MB + overhead".format(est_size))
+
+    data = {}
+    data["X_train"] = np.zeros((n_train, height, width, n_channels), dtype=np.uint8)
+    data["X_valid"] = np.zeros((n_valid, height, width, n_channels), dtype=np.uint8)
+    data["X_test"] = np.zeros((n_test, height, width, n_channels), dtype=np.uint8)
+    data["Y_train"] = np.zeros((n_train, height, width), dtype=np.uint8)
+    data["Y_valid"] = np.zeros((n_valid, height, width), dtype=np.uint8)
+    data["Y_test"] = np.zeros((n_test, height, width), dtype=np.uint8)
+
+    for dataset in ["train", "valid", "test"]:
+        print("- creating {} dataset".format(dataset))
+        for i in range(len(data["Y_"+dataset])):
+            scene, label = random_scene(templates, img_shape=img_shape, min_scale=0.5, rotate=30, noise=noise)
+            data["X_"+dataset][i] = scene
+            data["Y_"+dataset][i] = label
+    print("- Done")
+    return data
+
+
