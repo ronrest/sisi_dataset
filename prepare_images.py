@@ -91,3 +91,97 @@ def templates_from_raw_images(data_dir, id2label, shape=(100,100)):
     return templates_list
 
 
+def random_scene(templates, img_shape=(100,100), min_scale=0.5, rotate=30, noise=10, rgb=False):
+    height, width = img_shape
+    label = np.zeros(img_shape, dtype=np.uint8)
+
+    # Randonly chose the order in which the class objects will be added to scene
+    # - to simulate depth occlusion.
+    order = np.random.permutation(n_classes)
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    #  CREATE SCENE LABEL
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # For each class of object, randomly add it (or exclude it) from the scene
+    for id in order:
+        # Skip the background class
+        if id == 0:
+            continue
+
+        # Only add this class of object to scene 50% of time
+        if np.random.choice([True, False]):
+            choice_id = np.random.choice(len(templates[id]))
+            template = templates[id][choice_id]
+
+            # --------------------------------------
+            # TRANSFORMATIONS ON TEMPLATE - position, flip, rotation
+            # --------------------------------------
+            template = PIL.Image.fromarray(template)
+
+            # Random flip
+            if np.random.choice([True,False]):
+                template = template.transpose(method=PIL.Image.FLIP_LEFT_RIGHT)
+
+            # Random rotation of template
+            angle = np.random.randint(-rotate, rotate)
+            template = template.rotate(angle, expand=True, resample=PIL.Image.NEAREST)
+
+            # Randomly scale the template
+            rescale = (np.array(template.size)*np.random.uniform(low=min_scale, high=1.0)).astype(dtype=np.uint8)
+            template = template.resize(rescale, resample=PIL.Image.NEAREST)
+
+            # Randomly position in the scene
+            pos_x = np.random.randint(max(1,width-template.width+1))
+            pos_y = np.random.randint(max(1,height-template.height+1))
+            base = PIL.Image.fromarray(np.zeros(img_shape, dtype=np.uint8))
+            base.paste(template, box=[pos_x, pos_y])
+            template = np.asarray(base, dtype=np.uint8)
+            # --------------------------------------
+
+            # Assign class labels to pixels associated with this object
+            label[template>0] = id
+
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # CREATE SCENE IMAGE FROM LABEL
+    # Given the class labels for pixels, add
+    # unique color/texture to those regions
+    # for each class of object.
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    # BASE COLORS FOR OBJECTS/BG - Randomly shuffled for variety
+    if rgb:
+        base_colors = np.array(
+            [(94, 61, 8),
+            (77, 63, 43),
+            (116, 102, 82),
+            (154, 136, 111),
+            (209, 194, 167),
+            (204, 164, 108),
+            (85, 87, 83),
+            (136, 138, 133),
+            ])
+    else:
+        base_colors = np.array([0, 50, 87, 135, 185, 210, 255])
+    np.random.shuffle(base_colors)
+
+    # Scene blank canvas
+    n_channels = 3 if rgb else 1
+    scene = np.zeros((height,width,n_channels), dtype=np.uint8)
+
+    uids = np.unique(label) # class ids
+    for uid in uids:
+        # ADD COLOR - to the pixels associated with this class of object
+        pixels = label==uid
+        base = np.ones([height, width, n_channels])*base_colors[uid]
+
+        # ADD RANDOM NOISE - for texture
+        if noise:
+            base += np.random.normal(loc=0, scale=noise, size=[height, width, n_channels])
+            base = np.clip(base, 0, 255)
+            base = base.astype(np.uint8)
+
+        # Update the scene
+        scene[pixels] = base[pixels]
+
+    return scene, label
+
+
