@@ -289,7 +289,7 @@ def generate_data(templates, img_shape=(64,64), n_train=1024, n_valid=512, n_tes
 
 
 if __name__ == '__main__':
-    from viz import batch_of_images_to_grid, viz_segmentation_label, show_template_image, show_img
+    from viz import batch_of_images_to_grid, viz_segmentation_label, viz_overlayed_segmentation_label, show_template_image, show_img, array2pil
 
     data_dir = "raw_images"
     pickle_file_path = "data64_flat_grey.pickle" # Path to output pickle file
