@@ -23,3 +23,13 @@ the following versions of the libraries.
 - numpy (1.13.1)
 - pillow (4.1.0)
 
+# Samples
+
+Sample of generated input images.
+![Image of sample input images](sample_train.jpg)
+
+Sample of corresponding generated label images.
+![Image of sample label images](sample_labels.jpg)
+
+Sample of generated label images overlayed on top of input images.
+![Image of sample overlayed label over input images](sample_overlayed.jpg)
