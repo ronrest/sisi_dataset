@@ -14,7 +14,7 @@
 
 - python
 - numpy
-- pillow
+- pillow (>=3.0.0)
 
 The script was created in and runs smoothly on an environment that makes use of
 the following versions of the libraries.
