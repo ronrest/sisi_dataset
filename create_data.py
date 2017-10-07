@@ -2,6 +2,7 @@
 Code to generate the SiSi dataset
 
 """
+from __future__ import print_function, unicode_literals
 import os
 import glob
 import pickle
@@ -294,8 +295,8 @@ if __name__ == '__main__':
     data_dir = "raw_images"
     pickle_file_path = "data64_flat_grey.pickle" # Path to output pickle file
     img_shape=(64,64)
-    n_train=1024
-    n_valid=512
+    n_train=5120
+    n_valid=1024
     n_test=1024
     rgb=False
     noise = None
@@ -323,4 +324,4 @@ if __name__ == '__main__':
     # viz_overlayed_segmentation_label(X_grid, Y_grid, saveto="sample_overlayed.jpg")
 
     # Save as a pickle
-    obj2pickle(data, file=pickle_file_path, protocol=2)
+    obj2pickle(data, file=pickle_file_path)
