@@ -268,7 +268,7 @@ def generate_data(templates, img_shape=(64,64), n_train=1024, n_valid=512, n_tes
     n_channels = 3 if rgb else 1
 
     print("CREATING DATA")
-    est_size = (height*width*(n_channels+1)*(n_test+n_valid+n_test))/(1024*1000)
+    est_size = (height*width*(n_channels+1)*(n_train+n_valid+n_test))/(1024*1000)
     print("- Estimated size is {:0.2f} MB + overhead".format(est_size))
 
     data = {}
