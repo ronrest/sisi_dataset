@@ -305,6 +305,9 @@ def generate_data(templates, img_shape=(64,64), n_train=1024, n_valid=512, n_tes
             data["X_"+dataset][i] = scene
             data["Y_"+dataset][i] = label
 
+    data["colormap"] = [(0,0,0), (255,79,64), (115,173,33),(48,126,199)]
+    data["id2label"] = id2label
+    data["label2id"] = label2id
     data["credits"] = DATASET_CREDITS
 
     print("- Done")
@@ -337,13 +340,13 @@ if __name__ == '__main__':
     # X_grid = batch_of_images_to_grid(data["X_train"][:50], 5, 10)
     # Y_grid = batch_of_images_to_grid(data["Y_train"][:50], 5, 10)
     # show_img(X_grid)
-    # viz_segmentation_label(Y_grid).show()
-    # viz_overlayed_segmentation_label(X_grid, Y_grid).show()
+    # viz_segmentation_label(Y_grid, colormap=data["colormap"]).show()
+    # viz_overlayed_segmentation_label(X_grid, Y_grid, colormap=data["colormap"]).show()
 
     # # Save sample images
     # array2pil(X_grid).save("sample_train.jpg", "JPEG")
-    # viz_segmentation_label(Y_grid, saveto="sample_labels.jpg")
-    # viz_overlayed_segmentation_label(X_grid, Y_grid, saveto="sample_overlayed.jpg")
+    # viz_segmentation_label(Y_grid, colormap=data["colormap"], saveto="sample_labels.jpg")
+    # viz_overlayed_segmentation_label(X_grid, Y_grid, colormap=data["colormap"], saveto="sample_overlayed.jpg")
 
     # Save as a pickle
     obj2pickle(data, file=pickle_file_path)
