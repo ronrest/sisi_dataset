@@ -18,6 +18,25 @@ __credits__ = ["Ronny Restrepo"]
 __license__ = "Apache License"
 __version__ = "2.0"
 
+DATASET_CREDITS = \
+"""Dataset created using the code at https://github.com/ronrest/sisi_dataset
+
+Image Credits:
+    The images used to create the dataset are all under the
+    Creative Commons 0 (Public Domain) License
+    https://creativecommons.org/publicdomain/zero/1.0/deed.en
+
+    The links to the original images are available in the following files:
+    https://raw.githubusercontent.com/ronrest/sisi_dataset/master/raw_images/bird_credits.txt
+    https://raw.githubusercontent.com/ronrest/sisi_dataset/master/raw_images/cat_credits.txt
+    https://raw.githubusercontent.com/ronrest/sisi_dataset/master/raw_images/dog_credits.txt
+
+Dataset Credits:
+    The code for creating the dataset was created by Ronny Restrepo in 2017
+    and released under the the Apache 2.0 license
+"""
+
+
 # SETTINGS
 id2label = ["null", "bird", "cat", "dog"]
 label2id = {label:id for id,label in enumerate(id2label)}
@@ -285,6 +304,9 @@ def generate_data(templates, img_shape=(64,64), n_train=1024, n_valid=512, n_tes
             scene, label = random_scene(templates, img_shape=img_shape, min_scale=0.5, rotate=30, noise=noise)
             data["X_"+dataset][i] = scene
             data["Y_"+dataset][i] = label
+
+    data["credits"] = DATASET_CREDITS
+
     print("- Done")
     return data
 
